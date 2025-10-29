@@ -21,7 +21,7 @@ def login():
     customer = db.session.execute(query).scalars().first()
 
     if customer and customer.password == password:
-        token = encode_token(customer.customer_id)
+        token = encode_token(customer.id)
         return jsonify({
             "status": "success",
             "message": "Login successful",

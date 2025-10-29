@@ -1,47 +1,55 @@
-from jose import jwt
+from jose import jwt, JWTError
+from jose.exceptions import ExpiredSignatureError 
 from datetime import datetime, timezone, timedelta
 from functools import wraps
-from flask import request, jsonify
+from flask import request, jsonify, current_app
+from config import DevelopmentConfig
 
 
-SECRET_KEY = "your_secret_key"
+
+SECRET_KEY = DevelopmentConfig.SECRET_KEY
 
 def encode_token(customer_id):
-    payload = {
-        'exp': datetime.now(tz=timezone.utc) + timedelta(days=0, hours=1),
-        'iat': datetime.now(tz=timezone.utc),
-        'sub': customer_id
-    }
+    try:
     
-def encode_token(service_ticket_id):
-    payload = {
+
+        payload = {
         'exp': datetime.now(tz=timezone.utc) + timedelta(days=0, hours=1),
         'iat': datetime.now(tz=timezone.utc),
-        'sub': service_ticket_id
+        'sub': str(customer_id)
     }
-    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-    return token
+        secret = current_app.config.get("SECRET_KEY", SECRET_KEY)
+        token = jwt.encode(payload, secret, algorithm="HS256")
+        return token
+   
+    except Exception as e:
+        return str(e)
+    
 
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
         
-        if 'authorization' in request.headers:
-            token = request.headers['authorization'].split(" ")[1]
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            token = auth_header.split(" ")[1]
             
         if not token:
             return jsonify({'message': 'Token is missing!'}), 401
         
-        try:
+            try:
+                secret = current_app.config.get("SECRET_KEY", SECRET_KEY)
+                data = jwt.decode(token, secret, algorithms=['HS256'])
+                request.customer_id = int(data['sub'])
+
             
-            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-            request.customer_id = int(data['sub'])  
-        except jose.exceptions.ExpiredSignatureError:
-            return jsonify({'message': 'Token has expired!'}), 401
-        except jose.exceptions.JWTError:
-            return jsonify({'message': 'Token is invalid!'}), 401
+            except ExpiredSignatureError:   
+                return jsonify({'message': 'Token has expired!'}), 401
         
+            except JWTError:  
+                return jsonify({'message': 'Token is invalid!'}), 401 
+       
         return f(*args, **kwargs)
     
     return decorated

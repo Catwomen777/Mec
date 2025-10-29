@@ -1,17 +1,15 @@
 from flask import request, jsonify
 from sqlalchemy import select
 from marshmallow import ValidationError
-from app.models import InventoryItem, db
+from app.models import InventoryItem   # ✅ Correct model import
 from app.blueprints.inventory import inventory_bp
-from app.extensions import limiter, cache
+from app.extensions import limiter, cache, db
 from .schemas import inventory_schema, inventories_schema
-
 
 
 @inventory_bp.route("/", methods=["POST"])
 @limiter.limit("5 per minute")
 def create_inventory_item():
-    """Create a new inventory item."""
     data = request.get_json() or {}
     try:
         item = inventory_schema.load(data)
@@ -26,16 +24,14 @@ def create_inventory_item():
 @inventory_bp.route("/", methods=["GET"])
 @cache.cached(timeout=30)
 def get_inventory_items():
-    """List all inventory items."""
-    items = db.session.execute(select(Inventory)).scalars().all()
-    return items_schema.jsonify(items), 200
+    items = db.session.execute(select(InventoryItem)).scalars().all()  
+    return inventories_schema.jsonify(items), 200  
 
 
 @inventory_bp.route("/<int:item_id>", methods=["GET"])
 @cache.cached(timeout=30)
 def get_inventory_item(item_id):
-    """Retrieve a single inventory item by ID."""
-    item = db.session.get(Inventory, item_id)
+    item = db.session.get(InventoryItem, item_id)  
     if not item:
         return jsonify({"error": "Inventory item not found."}), 404
     return inventory_schema.jsonify(item), 200
@@ -44,8 +40,7 @@ def get_inventory_item(item_id):
 @inventory_bp.route("/<int:item_id>", methods=["PUT", "PATCH"])
 @limiter.limit("5 per minute")
 def update_inventory_item(item_id):
-    """Update an inventory item."""
-    item = db.session.get(Inventory, item_id)
+    item = db.session.get(InventoryItem, item_id)  # 
     if not item:
         return jsonify({"error": "Inventory item not found."}), 404
 
@@ -63,7 +58,7 @@ def update_inventory_item(item_id):
 @limiter.limit("20 per day")
 def delete_inventory_item(item_id):
     """Delete an inventory item."""
-    item = db.session.get(Inventory, item_id)
+    item = db.session.get(InventoryItem, item_id)
     if not item:
         return jsonify({"error": "Inventory item not found."}), 404
 

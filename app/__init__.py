@@ -1,11 +1,12 @@
 from flask import Flask
 from app.extensions import db, ma, limiter, cache
-from app.models import db
 
-def create_app(config_name):
+
+def create_app(config_name="DevelopmentConfig"):
+
     
     app = Flask(__name__)
-    app.config.from_object(f'congfig.{config_name}')
+    app.config.from_object(f'config.{config_name}')
     
     db.init_app(app)
     ma.init_app(app)
@@ -18,7 +19,7 @@ def create_app(config_name):
     
     from .blueprints.customers import customers_bp
     from .blueprints.mechanics import mechanics_bp
-    from .blueprints.servicetickets import service_tickets_bp4
+    from .blueprints.servicetickets import service_tickets_bp
     from .blueprints.inventory import inventory_bp
 
     app.register_blueprint(customers_bp, url_prefix="/customers")
@@ -28,12 +29,11 @@ def create_app(config_name):
 
     with app.app_context():
         db.create_all()
+        
+        print("\n🚀 REGISTERED ROUTES:")
+        for rule in app.url_map.iter_rules():
+            print(rule)
+
 
     return app
     
-    
-    
-    
-    
-    
-    return app
