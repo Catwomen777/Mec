@@ -4,11 +4,10 @@ from marshmallow import ValidationError
 from app.models import Mechanic, db
 from app.blueprints.mechanics import mechanics_bp
 from app.extensions import limiter, cache
-from . import schemas
-import inspect
-print(f"✅ USING SCHEMA FILE: {inspect.getfile(schemas)}")
-
 from .schemas import mechanic_schema, mechanics_schema
+
+
+
 
 
 

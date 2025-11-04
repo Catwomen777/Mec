@@ -24,6 +24,7 @@ class Customer(db.Model):
 
 
     tickets: Mapped[List["ServiceTicket"]] = relationship("ServiceTicket", back_populates="customer")
+    
 
 
 class ServiceTicket(db.Model):
