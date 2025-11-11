@@ -52,7 +52,6 @@ class Mechanic(db.Model):
     email: Mapped[str] = mapped_column(db.String(360), unique=True, nullable=False)
     salary: Mapped[float] = mapped_column(db.Float, nullable=False)
     
-    
     tickets: Mapped[List["ServiceTicket"]] = relationship(
         "ServiceTicket",
         secondary=ticket_mechanic,
