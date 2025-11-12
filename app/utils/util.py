@@ -4,10 +4,11 @@ from datetime import datetime, timezone, timedelta
 from functools import wraps
 from flask import request, jsonify, current_app
 from config import DevelopmentConfig
+import os
 
 
 
-SECRET_KEY = DevelopmentConfig.SECRET_KEY
+SECRET_KEY = os.environ.get("SECRET_KEY") or "supper secret secret"
 
 def encode_token(customer_id):
     try:
