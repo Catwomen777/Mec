@@ -51,6 +51,9 @@ def create_app(config_name="DevelopmentConfig"):
         print("\n🚀 REGISTERED ROUTES:")
         for rule in app.url_map.iter_rules():
             print(rule)
+@app.route('/')
+def home():
+    return {"message": "Welcome to the Mechanic Shop API 🚗"}, 200
 
 
     return app
