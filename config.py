@@ -5,9 +5,9 @@ class DevelopmentConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
     DEBUG = True
     SECRET_KEY = "your_secret_key"
-    
-    
-    
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
 class TestingConfig:
     TESTING = True
     SECRET_KEY = "testing_secret_key"
@@ -16,5 +16,8 @@ class TestingConfig:
 
 
 class ProductionConfig:
-    SQLALCHEMY_DATABASE_URI = os.environ.get(SQLALCHEMY_DATABASE_URI) or 'sqlite:///app.db'
+    # ✅ FIXED — added quotes around environment variable name
+    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI", "sqlite:///app.db")
+    SECRET_KEY = os.environ.get("SECRET_KEY", "your_secret_key")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     CACHE_TYPE = "SimpleCache"  # Use a more robust cache in production
