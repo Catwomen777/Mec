@@ -8,7 +8,7 @@ import os
 
 
 
-SECRET_KEY = os.environ.get("SECRET_KEY") or "supper secret secret"
+SECRET_KEY = os.environ.get("SECRET_KEY") or "super secret secret"
 
 def encode_token(customer_id):
     try:

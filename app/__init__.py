@@ -1,7 +1,7 @@
 from flask import Flask
 from app.extensions import db, ma, limiter, cache
 from flask_swagger_ui import get_swaggerui_blueprint
-import os
+
 
 
 SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
@@ -14,7 +14,6 @@ swagger_bp = get_swaggerui_blueprint(
         
 )
 
-SECRET_KEY = os.environ.get('SECRET_KEY') or "super secret secrets"
 
 
 def create_app(config_name="DevelopmentConfig"):

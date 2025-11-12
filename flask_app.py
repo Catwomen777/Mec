@@ -4,4 +4,6 @@ from app.models import db
 app = create_app('ProductionConfig')
 
 with app.app_context():
-    db.create_all()
+     db.create_all()
+     
+    
