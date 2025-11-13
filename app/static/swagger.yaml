@@ -58,7 +58,7 @@ paths:
 
     post:
       tags:
-        - Customers
+        - Customers/Customers
       summary: Create a new customer
       parameters:
         - in: body
