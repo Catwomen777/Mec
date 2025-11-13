@@ -16,9 +16,9 @@ swagger_bp = get_swaggerui_blueprint(
 
 
 
-def create_app(config_name="ProductionConfig"):
-    app = Flask(__name__)
-    app.config.from_object(f'config.{config_name}')
+def create_app(config_name="DevelopmentConfig"):
+    app = Flask(__name__, static_url_path='/static', static_folder='app/static')
+    app.config.from_object(f"config.{config_name}")
     
     db.init_app(app)
     ma.init_app(app)
