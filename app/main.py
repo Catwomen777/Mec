@@ -13,12 +13,12 @@ API_URL = '/static/swagger.yaml'
 swagger_bp = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
-    config={'app_name': "Mechanic Shop API"}
+    config={'app_name': "Auto Shop API"}
 )
 
 
 def create_app(config_name="ProductionConfig"):
-    app = Flask(__name__, static_url_path='/static')
+    app = Flask(__name__)
     app.config.from_object(f"config.{config_name}")
 
     # Initialize extensions
