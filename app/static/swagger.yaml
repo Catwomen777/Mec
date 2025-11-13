@@ -4,7 +4,7 @@ info:
   description: "This API manages customers, mechanics, tickets, and inventory."
   version: "1.0.0"
 
-host: "mecshop.onrender.com"
+host: "mec-1.onrender.com"
 schemes:
   - "https"
 
