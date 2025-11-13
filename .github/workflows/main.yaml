@@ -50,8 +50,39 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install -r requirements.txt
 
       - name: Run unit tests
         run: |
           python -m unittest discover -s tests -p "test_*.py"
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Create virtual Environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Deploy to proction
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service_id: ${{ secrets.sERVICE_ID }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+
+

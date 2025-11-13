@@ -1,6 +1,7 @@
 from flask import Flask
 from app.extensions import db, ma, limiter, cache
 from flask_swagger_ui import get_swaggerui_blueprint
+from .main import create_app
 
 
 
