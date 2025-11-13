@@ -7,8 +7,8 @@ from app.blueprints.servicetickets import service_tickets_bp
 from app.blueprints.inventory import inventory_bp
 from flask_swagger_ui import get_swaggerui_blueprint
 
-SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
-API_URL = '/static/swagger.yaml'  # Our API URL (can of course be a local resource)
+SWAGGER_URL = '/api/docs'
+API_URL = '/static/swagger.yaml'
 
 swagger_bp = get_swaggerui_blueprint(
     SWAGGER_URL,
@@ -17,38 +17,34 @@ swagger_bp = get_swaggerui_blueprint(
 )
 
 
-
 def create_app(config_name="ProductionConfig"):
-    app = Flask(__name__)
+    app = Flask(__name__, static_url_path='/static', static_folder='app/static')
     app.config.from_object(f"config.{config_name}")
 
-    # --- Initialize extensions ---
+    # Initialize extensions
     db.init_app(app)
     ma.init_app(app)
     cache.init_app(app)
     limiter.init_app(app)
     limiter.exempt(swagger_bp)
 
-    # --- Register blueprints ---
+    # Register blueprints
     app.register_blueprint(customers_bp, url_prefix="/customers")
     app.register_blueprint(mechanics_bp, url_prefix="/mechanics")
     app.register_blueprint(service_tickets_bp, url_prefix="/service_tickets")
     app.register_blueprint(inventory_bp, url_prefix="/inventory")
-    
     app.register_blueprint(swagger_bp, url_prefix=SWAGGER_URL)
 
-    # --- Create database tables ---
+    # Create database tables
     with app.app_context():
-         db.create_all()
-         DEBUG = True
-        
-    print("URL MAP:\n", app.url_map)
+        db.create_all()
 
+    print("URL MAP:\n", app.url_map)
     return app
 
 
-if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
-    
+# ✅ This ensures both local and Render deployments work
+app = create_app("ProductionConfig")
 
+if __name__ == "__main__":
+    app.run(debug=True)
