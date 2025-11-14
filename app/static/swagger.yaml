@@ -41,7 +41,7 @@ paths:
           schema:
             $ref: '#/definitions/LoginResponse'
 
-  /customers:
+  /customers/{customer_id}:
     get:
       tags:
         - Customers
@@ -56,6 +56,7 @@ paths:
             items:
               $ref: '#/definitions/Customer'
 
+    /customers/customers:
     post:
       tags:
         - Customers
@@ -90,6 +91,7 @@ paths:
           schema:
             $ref: '#/definitions/Customer'
 
+    /customers/{customer_id}:
     put:
       tags:
         - Customers
@@ -110,7 +112,8 @@ paths:
           description: Updated customer
           schema:
             $ref: '#/definitions/Customer'
-
+    
+    /customers/{customer_id}:
     delete:
       tags:
         - Customers
@@ -127,7 +130,7 @@ paths:
           description: Customer deleted
 
 
-  /mechanics:
+  /mechanics/{mechanic_id}:
     get:
       tags:
         - Mechanics
@@ -139,7 +142,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Mechanic'
-
+    /mechanics:
     post:
       tags:
         - Mechanics
@@ -171,7 +174,8 @@ paths:
           description: Mechanic details
           schema:
             $ref: '#/definitions/Mechanic'
-
+   
+    /mechanics/{mechanic_id}:
     put:
       tags:
         - Mechanics
@@ -190,7 +194,7 @@ paths:
           description: Mechanic updated
           schema:
             $ref: '#/definitions/Mechanic'
-
+    /mechanics/{mechanic_id}:
     delete:
       tags:
         - Mechanics
@@ -216,7 +220,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/ServiceTicket'
-
+    /service_tickets:
     post:
       tags:
         - Service Tickets
@@ -295,7 +299,7 @@ paths:
         404:
           description: Ticket or mechanic not found
 
-
+    /service_tickets/{ticket_id}:
     put:
       tags:
         - Service Tickets
@@ -315,7 +319,7 @@ paths:
           description: Service ticket updated
           schema:
             $ref: '#/definitions/ServiceTicket'
-
+    /service_tickets/{ticket_id}:
     delete:
       tags:
         - Service Tickets
@@ -341,7 +345,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/InventoryItem'
-
+    /inventory:
     post:
       tags:
         - Inventory
@@ -373,7 +377,7 @@ paths:
           description: Inventory item details
           schema:
             $ref: '#/definitions/InventoryItem'
-
+    /inventory/{item_id}:
     put:
       tags:
         - Inventory
@@ -393,7 +397,7 @@ paths:
           description: Inventory item updated
           schema:
             $ref: '#/definitions/InventoryItem'
-
+    /inventory/{item_id}:
     delete:
       tags:
         - Inventory
