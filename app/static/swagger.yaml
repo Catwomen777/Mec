@@ -56,7 +56,7 @@ paths:
             items:
               $ref: '#/definitions/Customer'
 
-    
+    /customers/customers:
     post:
       tags:
         - Customers
