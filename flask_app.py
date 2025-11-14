@@ -3,8 +3,6 @@ from app.models import db
 
 
 
-app = create_app("ProductionConfig")
-
-
-
-
+def create_app(config_name="ProductiontConfig"):
+     app = create_app(config_name)
+     return app

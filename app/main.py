@@ -44,8 +44,8 @@ def create_app(config_name="ProductionConfig"):
     return app
 
 
-# ✅ This ensures both local and Render deployments work
-app = create_app("ProductionConfig")
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
