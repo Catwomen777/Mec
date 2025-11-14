@@ -24,39 +24,20 @@ securityDefinitions:
 
 paths:
 
-  /customers/login:
-    post:
-      tags:
-        - Customers
-      summary: Login and get JWT token
-      parameters:
-        - in: body
-          name: credentials
-          required: true
-          schema:
-            $ref: '#/definitions/LoginRequest'
-      responses:
-        200:
-          description: Login successful
-          schema:
-            $ref: '#/definitions/LoginResponse'
-
-  
+  paths:
+  /customers/:
     get:
       tags:
         - Customers
       summary: List all customers
-      security:
-        - BearerAuth: []
       responses:
         200:
-          description: List of customers
+          description: Customer list
           schema:
             type: array
             items:
               $ref: '#/definitions/Customer'
 
-    /customers/:
     post:
       tags:
         - Customers
@@ -73,36 +54,46 @@ paths:
           schema:
             $ref: '#/definitions/Customer'
 
+  /customers/login:
+    post:
+      tags:
+        - Customers
+      summary: Login
+      parameters:
+        - in: body
+          name: credentials
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: JWT Token
+
   /customers/{customer_id}:
     get:
       tags:
         - Customers
-      summary: Get one customer by ID
-      security:
-        - BearerAuth: []
+      summary: Get customer by ID
       parameters:
         - in: path
           name: customer_id
-          required: true
           type: integer
+          required: true
       responses:
         200:
-          description: Customer details
+          description: Customer data
           schema:
             $ref: '#/definitions/Customer'
 
-    /customers/{customer_id}:
     put:
       tags:
         - Customers
       summary: Update customer
-      security:
-        - BearerAuth: []
       parameters:
         - in: path
           name: customer_id
-          required: true
           type: integer
+          required: true
         - in: body
           name: customer
           schema:
@@ -112,22 +103,19 @@ paths:
           description: Updated customer
           schema:
             $ref: '#/definitions/Customer'
-    
-    
+
     delete:
       tags:
         - Customers
       summary: Delete customer
-      security:
-        - BearerAuth: []
       parameters:
         - in: path
           name: customer_id
-          required: true
           type: integer
+          required: true
       responses:
-        204:
-          description: Customer deleted
+        200:
+          description: Deleted
 
     /customers/search-customers:
     get:
@@ -152,7 +140,7 @@ paths:
 
 
 
-  /mechanics:
+    /mechanics:
     get:
       tags:
         - Mechanics
@@ -164,7 +152,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Mechanic'
-   
+
     post:
       tags:
         - Mechanics
@@ -181,7 +169,7 @@ paths:
           schema:
             $ref: '#/definitions/Mechanic'
 
-  /mechanics/{mechanic_id}:
+    /mechanics/{mechanic_id}:
     get:
       tags:
         - Mechanics
@@ -190,14 +178,21 @@ paths:
         - in: path
           name: mechanic_id
           required: true
+          description: ID of the mechanic to retrieve
           type: integer
       responses:
         200:
-          description: Mechanic details
+          description: Mechanic found
           schema:
             $ref: '#/definitions/Mechanic'
-   
-    /mechanics/{mechanic_id}:
+        404:
+          description: Mechanic not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
     put:
       tags:
         - Mechanics
@@ -209,14 +204,35 @@ paths:
           type: integer
         - in: body
           name: mechanic
+          required: true
           schema:
             $ref: '#/definitions/MechanicUpdate'
       responses:
         200:
-          description: Mechanic updated
+          description: Updated mechanic
           schema:
             $ref: '#/definitions/Mechanic'
-    /mechanics/{mechanic_id}:
+
+    patch:
+      tags:
+        - Mechanics
+      summary: Partial update mechanic
+      parameters:
+        - in: path
+          name: mechanic_id
+          required: true
+          type: integer
+        - in: body
+          name: mechanic
+          required: true
+          schema:
+            $ref: '#/definitions/MechanicUpdate'
+      responses:
+        200:
+          description: Updated mechanic
+          schema:
+            $ref: '#/definitions/Mechanic'
+
     delete:
       tags:
         - Mechanics
@@ -227,7 +243,7 @@ paths:
           required: true
           type: integer
       responses:
-        204:
+        200:
           description: Mechanic deleted
 
   /service_tickets/:
