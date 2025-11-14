@@ -1,8 +1,6 @@
-from app import create_app
-from app.models import db
+from app.main import create_app
 
+app = create_app("ProductionConfig")
 
-
-def create_app(config_name="ProductiontConfig"):
-     app = create_app(config_name)
-     return app
+if __name__ == "__main__":
+    app.run()
