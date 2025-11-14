@@ -41,7 +41,7 @@ paths:
           schema:
             $ref: '#/definitions/LoginResponse'
 
-  /customers/{customer_id}:
+  
     get:
       tags:
         - Customers
@@ -56,7 +56,7 @@ paths:
             items:
               $ref: '#/definitions/Customer'
 
-    /customers/customers:
+    
     post:
       tags:
         - Customers
@@ -113,7 +113,7 @@ paths:
           schema:
             $ref: '#/definitions/Customer'
     
-    /customers/{customer_id}:
+    
     delete:
       tags:
         - Customers
@@ -129,8 +129,30 @@ paths:
         204:
           description: Customer deleted
 
+    /customers/search-customers:
+    get:
+      tags:
+        - Customers
+      summary: Search customers
+      parameters:
+        - in: query
+          name: name
+          type: string
+        - in: query
+          name: email
+          type: string
+      responses:
+        200:
+          description: Search results
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Customer'
 
-  /mechanics/{mechanic_id}:
+
+
+
+  /mechanics:
     get:
       tags:
         - Mechanics
@@ -142,7 +164,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Mechanic'
-    /mechanics:
+   
     post:
       tags:
         - Mechanics
@@ -208,7 +230,7 @@ paths:
         204:
           description: Mechanic deleted
 
-  /service_tickets:
+  /service_tickets/:
     get:
       tags:
         - Service Tickets
@@ -345,7 +367,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/InventoryItem'
-    /inventory:
+    
     post:
       tags:
         - Inventory
@@ -377,7 +399,7 @@ paths:
           description: Inventory item details
           schema:
             $ref: '#/definitions/InventoryItem'
-    /inventory/{item_id}:
+    
     put:
       tags:
         - Inventory
@@ -397,7 +419,7 @@ paths:
           description: Inventory item updated
           schema:
             $ref: '#/definitions/InventoryItem'
-    /inventory/{item_id}:
+    
     delete:
       tags:
         - Inventory

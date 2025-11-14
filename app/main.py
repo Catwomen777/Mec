@@ -44,7 +44,7 @@ def create_app(config_name="ProductionConfig"):
     return app
 
 
-
+app = create_app("ProductionConfig")
 
 
 if __name__ == "__main__":
