@@ -20,7 +20,7 @@ securityDefinitions:
     in: header
     description: 
       Enter token like:
-      Bearer YOUR_JWT_TOKEE
+      Bearer YOUR_JWT_TOKEN
 
 
   paths:
