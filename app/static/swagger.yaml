@@ -23,11 +23,8 @@ securityDefinitions:
 
 paths:
 
-  ############################
-  #        CUSTOMERS
-  ############################
-
-  /customers:
+  
+  /customers/:
     get:
       tags: [Customers]
       summary: "List all customers"
@@ -134,10 +131,7 @@ paths:
             items:
               $ref: '#/definitions/Customer'
 
-  ############################
-  #        MECHANICS
-  ############################
-
+  
   /mechanics:
     get:
       tags: [Mechanics]
@@ -228,9 +222,7 @@ paths:
         200:
           description: "Mechanic deleted"
 
-  ############################
-  #     SERVICE TICKETS
-  ############################
+  
 
   /service_tickets/:
     get:
@@ -343,9 +335,7 @@ paths:
           schema:
             $ref: '#/definitions/ServiceTicket'
 
-  ############################
-  #         INVENTORY
-  ############################
+  
 
   /inventory:
     get:
@@ -419,9 +409,7 @@ paths:
         204:
           description: "Item deleted"
 
-####################################################
-#                 DEFINITIONS
-####################################################
+
 
 definitions:
 
