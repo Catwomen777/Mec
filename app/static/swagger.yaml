@@ -116,7 +116,7 @@ securityDefinitions:
         200:
           description: Deleted
 
-    /customers/search-customers:
+  /customers/search-customers:
     get:
       tags:
         - Customers
@@ -135,7 +135,7 @@ securityDefinitions:
             type: array
             items:
               $ref: '#/definitions/Customer'
-
+ 
 
 
 
