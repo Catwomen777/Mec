@@ -45,6 +45,7 @@ def create_app(config_name="ProductionConfig"):
     app.register_blueprint(swagger_bp, url_prefix=SWAGGER_URL) #Registering our swagger blueprint
 
     with app.app_context():
+       
         db.create_all()
         
         print("\n🚀 REGISTERED ROUTES:")

@@ -18,11 +18,10 @@ securityDefinitions:
     type: apiKey
     name: Authorization
     in: header
-    description: |
+    description: 
       Enter token like:
-      Bearer YOUR_JWT_TOKEN
+      Bearer YOUR_JWT_TOKEE
 
-paths:
 
   paths:
   /customers/:
@@ -185,14 +184,7 @@ paths:
           description: Mechanic found
           schema:
             $ref: '#/definitions/Mechanic'
-        404:
-          description: Mechanic not found
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-
+        
     put:
       tags:
         - Mechanics
@@ -290,7 +282,7 @@ paths:
           description: Service ticket details
           schema:
             $ref: '#/definitions/ServiceTicket'
-
+       
     /service_tickets/{ticket_id}/assign_mechanic:
     post:
       tags:
@@ -357,6 +349,9 @@ paths:
           description: Service ticket updated
           schema:
             $ref: '#/definitions/ServiceTicket'
+        404:
+          description: Ticket not found
+
     /service_tickets/{ticket_id}:
     delete:
       tags:
@@ -368,8 +363,10 @@ paths:
           required: true
           type: integer
       responses:
-        204:
+        200:
           description: Service ticket deleted
+        404:
+          description: Ticket not found
 
   /inventory:
     get:
@@ -496,6 +493,23 @@ definitions:
       password:
         type: string
 
+  LoginRequest:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+
   AssignMechanicRequest:
     type: object
     required:
@@ -514,41 +528,30 @@ definitions:
         type: integer
         description: The ID of the mechanic to remove
 
-
-  LoginRequest:
-    type: object
-    required:
-      - email
-      - password
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-
-  LoginResponse:
-    type: object
-    properties:
-      token:
-        type: string
-
-
   Mechanic:
     type: object
     properties:
-      id: { type: integer }
-      name: { type: string }
-      email: { type: string }
+      id:
+        type: integer
+      name:
+        type: string
+      email:
+        type: string
       salary:
         type: number
         format: float
 
   MechanicCreate:
     type: object
-    required: [name, email, salary]
+    required:
+      - name
+      - email
+      - salary
     properties:
-      name: { type: string }
-      email: { type: string }
+      name:
+        type: string
+      email:
+        type: string
       salary:
         type: number
         format: float
@@ -556,8 +559,10 @@ definitions:
   MechanicUpdate:
     type: object
     properties:
-      name: { type: string }
-      email: { type: string }
+      name:
+        type: string
+      email:
+        type: string
       salary:
         type: number
         format: float
@@ -605,8 +610,6 @@ definitions:
         items:
           type: integer
 
-
-
   InventoryItem:
     type: object
     properties:
@@ -635,6 +638,3 @@ definitions:
         type: string
       quantity:
         type: integer
-
-
-
