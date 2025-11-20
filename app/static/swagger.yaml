@@ -27,7 +27,7 @@ paths:
   #        CUSTOMERS
   ############################
 
-  /customers/:
+  /customers:
     get:
       tags: [Customers]
       summary: "List all customers"
