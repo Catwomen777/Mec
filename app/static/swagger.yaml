@@ -51,21 +51,29 @@ paths:
           schema:
             $ref: '#/definitions/Customer'
 
-  /customers/login:
-    post:
-      tags: [Customers]
-      summary: "Login"
-      parameters:
-        - in: body
-          name: credentials
-          required: true
-          schema:
-            $ref: '#/definitions/LoginRequest'
-      responses:
-        200:
-          description: "JWT Token"
-          schema:
-            $ref: '#/definitions/LoginResponse'
+ /customers/login:
+  post:
+    tags: [Customers]
+    summary: "Login"
+    parameters:
+      - in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+    responses:
+      200:
+        description: "JWT Token"
+        schema:
+          $ref: '#/definitions/LoginResponse'
+      401:
+        description: "Invalid email or password."
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Invalid email or password."
 
   /customers/{customer_id}:
     get:
