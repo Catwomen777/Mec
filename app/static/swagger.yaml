@@ -63,19 +63,13 @@ paths:
           schema:
             $ref: '#/definitions/LoginRequest'
     responses:
-      200:
-        description: "JWT Token"
-        schema:
-          $ref: '#/definitions/LoginResponse'
-      401:
-        description: "Invalid email or password."
-        schema:
-          type: object
-          properties:
-            error:
-              type: string
-              example: "Invalid email or password."
-              
+        200:
+          description: "JWT Token"
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        401:
+          description: "Invalid email or password."
+        
   /customers/{customer_id}:
     get:
       tags: [Customers]
