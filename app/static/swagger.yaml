@@ -430,6 +430,7 @@ definitions:
     type: object
     required: [name, email, phone, password]
     properties:
+      id: { type: integer }
       name: { type: string }
       email: { type: string }
       phone: { type: string }
@@ -438,6 +439,7 @@ definitions:
   CustomerUpdate:
     type: object
     properties:
+      id: { type: integer }
       name: { type: string }
       email: { type: string }
       phone: { type: string }
@@ -481,6 +483,7 @@ definitions:
     type: object
     required: [name, email, salary]
     properties:
+      id: { type: integer }
       name: { type: string }
       email: { type: string }
       salary:
@@ -490,6 +493,7 @@ definitions:
   MechanicUpdate:
     type: object
     properties:
+      id: { type: integer }
       name: { type: string }
       email: { type: string }
       salary:
