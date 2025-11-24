@@ -74,6 +74,8 @@ paths:
     get:
       tags: [Customers]
       summary: "Get customer by ID"
+      security:
+        - BearerAuth: []
       parameters:
         - in: path
           name: customer_id
