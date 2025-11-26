@@ -2,7 +2,7 @@ swagger: "2.0"
 
 info:
   title: "Mechanic Shop API"
-  description: "This API manages customers, mechanics, tickets, and inventory."
+  description: "API for managing customers, mechanics, service tickets, and inventory."
   version: "1.0.0"
 
 host: "mec-1.onrender.com"
@@ -14,12 +14,14 @@ consumes:
 produces:
   - "application/json"
 
+
 securityDefinitions:
-  Bearer: 
+  Bearer:
     type: apiKey
     name: Authorization
     in: header
-    description: "Enter: Bearer {token}"
+    description: "Enter **Bearer <token>**"
+
 
 security:
   - Bearer: []
@@ -31,6 +33,7 @@ paths:
     get:
       tags: [Customers]
       summary: "List all customers"
+      description: "Returns a list of all customers in the system."
       responses:
         200:
           description: "Customer list"
@@ -42,43 +45,48 @@ paths:
     post:
       tags: [Customers]
       summary: "Create a new customer"
+      description: "Creates a new customer with required fields: name, email, phone, password."
+      security: []   # Allow public signup
       parameters:
         - in: body
           name: customer
           required: true
           schema:
             $ref: '#/definitions/CustomerCreate'
+          description: "Customer creation payload"
       responses:
         201:
-          description: "Customer created"
+          description: "Customer successfully created"
           schema:
             $ref: '#/definitions/Customer'
+        400:
+          description: "Validation error"
 
-  
   /customers/login:
     post:
       tags: [Customers]
       summary: "Login"
+      description: "Authenticates a customer and returns a JWT token."
+      security: []   # login must be public
       parameters:
         - in: body
           name: credentials
           required: true
           schema:
             $ref: '#/definitions/LoginRequest'
-    responses:
+      responses:
         200:
           description: "JWT Token"
           schema:
             $ref: '#/definitions/LoginResponse'
         401:
           description: "Invalid email or password."
-        
+
   /customers/{customer_id}:
     get:
       tags: [Customers]
       summary: "Get customer by ID"
-      security:
-        - BearerAuth: []
+      description: "Returns a customer's details using the ID."
       parameters:
         - in: path
           name: customer_id
@@ -89,12 +97,13 @@ paths:
           description: "Customer data"
           schema:
             $ref: '#/definitions/Customer'
+        404:
+          description: "Customer not found"
 
     put:
       tags: [Customers]
       summary: "Update customer"
-      security:
-        - BearerAuth: []
+      description: "Fully updates a customer's details."
       parameters:
         - in: path
           name: customer_id
@@ -109,12 +118,13 @@ paths:
           description: "Updated customer"
           schema:
             $ref: '#/definitions/Customer'
+        404:
+          description: "Customer not found"
 
     delete:
       tags: [Customers]
       summary: "Delete customer"
-      security:
-        - BearerAuth: []
+      description: "Deletes a customer by ID."
       parameters:
         - in: path
           name: customer_id
@@ -122,14 +132,15 @@ paths:
           required: true
       responses:
         200:
-          description: "Deleted"
+          description: "Customer deleted"
+        404:
+          description: "Customer not found"
 
   /customers/search-customers:
     get:
       tags: [Customers]
       summary: "Search customers"
-      security:
-        - BearerAuth: []
+      description: "Search customers by name or email."
       parameters:
         - in: query
           name: name
@@ -146,10 +157,12 @@ paths:
               $ref: '#/definitions/Customer'
 
   
+
   /mechanics:
     get:
       tags: [Mechanics]
       summary: "List all mechanics"
+      description: "Returns a list of all mechanics."
       responses:
         200:
           description: "Mechanic list"
@@ -160,7 +173,8 @@ paths:
 
     post:
       tags: [Mechanics]
-      summary: "Create a mechanic"
+      summary: "Create mechanic"
+      description: "Adds a new mechanic with name, email, and salary."
       parameters:
         - in: body
           name: mechanic
@@ -172,11 +186,14 @@ paths:
           description: "Mechanic created"
           schema:
             $ref: '#/definitions/Mechanic'
+        400:
+          description: "Validation error"
 
   /mechanics/{mechanic_id}:
     get:
       tags: [Mechanics]
       summary: "Get mechanic by ID"
+      description: "Retrieves a mechanic's details."
       parameters:
         - in: path
           name: mechanic_id
@@ -187,10 +204,13 @@ paths:
           description: "Mechanic found"
           schema:
             $ref: '#/definitions/Mechanic'
+        404:
+          description: "Mechanic not found"
 
     put:
       tags: [Mechanics]
       summary: "Update mechanic"
+      description: "Fully updates a mechanic's information."
       parameters:
         - in: path
           name: mechanic_id
@@ -205,10 +225,13 @@ paths:
           description: "Updated mechanic"
           schema:
             $ref: '#/definitions/Mechanic'
+        404:
+          description: "Mechanic not found"
 
     patch:
       tags: [Mechanics]
       summary: "Partially update mechanic"
+      description: "Updates only the provided fields for a mechanic."
       parameters:
         - in: path
           name: mechanic_id
@@ -223,10 +246,13 @@ paths:
           description: "Updated mechanic"
           schema:
             $ref: '#/definitions/Mechanic'
+        404:
+          description: "Mechanic not found"
 
     delete:
       tags: [Mechanics]
       summary: "Delete mechanic"
+      description: "Deletes a mechanic from the system."
       parameters:
         - in: path
           name: mechanic_id
@@ -235,13 +261,16 @@ paths:
       responses:
         200:
           description: "Mechanic deleted"
+        404:
+          description: "Mechanic not found"
 
   
 
-  /service_tickets/:
+  /service_tickets:
     get:
       tags: [Service Tickets]
       summary: "List all service tickets"
+      description: "Returns all service tickets currently in the system."
       responses:
         200:
           description: "All service tickets"
@@ -250,10 +279,10 @@ paths:
             items:
               $ref: '#/definitions/ServiceTicket'
 
-  /service_tickets:
     post:
       tags: [Service Tickets]
-      summary: "Create a service ticket"
+      summary: "Create service ticket"
+      description: "Creates a new service ticket."
       parameters:
         - in: body
           name: ticket
@@ -262,7 +291,7 @@ paths:
             $ref: '#/definitions/ServiceTicketCreate'
       responses:
         201:
-          description: "Ticket created"
+          description: "Service ticket created"
           schema:
             $ref: '#/definitions/ServiceTicket'
 
@@ -270,6 +299,7 @@ paths:
     get:
       tags: [Service Tickets]
       summary: "Get service ticket"
+      description: "Retrieves a service ticket by ID."
       parameters:
         - in: path
           name: ticket_id
@@ -280,10 +310,13 @@ paths:
           description: "Service ticket details"
           schema:
             $ref: '#/definitions/ServiceTicket'
+        404:
+          description: "Ticket not found"
 
     put:
       tags: [Service Tickets]
       summary: "Update service ticket"
+      description: "Fully updates a service ticket."
       parameters:
         - in: path
           name: ticket_id
@@ -302,6 +335,7 @@ paths:
     delete:
       tags: [Service Tickets]
       summary: "Delete service ticket"
+      description: "Deletes a service ticket."
       parameters:
         - in: path
           name: ticket_id
@@ -314,7 +348,8 @@ paths:
   /service_tickets/{ticket_id}/assign_mechanic:
     post:
       tags: [Service Tickets]
-      summary: "Assign a mechanic"
+      summary: "Assign mechanic"
+      description: "Assigns a mechanic to a service ticket."
       parameters:
         - in: path
           name: ticket_id
@@ -334,6 +369,7 @@ paths:
     post:
       tags: [Service Tickets]
       summary: "Remove mechanic"
+      description: "Removes a mechanic from a service ticket."
       parameters:
         - in: path
           name: ticket_id
@@ -349,12 +385,12 @@ paths:
           schema:
             $ref: '#/definitions/ServiceTicket'
 
-  
 
   /inventory:
     get:
       tags: [Inventory]
       summary: "List inventory items"
+      description: "Returns all inventory entries."
       responses:
         200:
           description: "Inventory list"
@@ -366,6 +402,7 @@ paths:
     post:
       tags: [Inventory]
       summary: "Create inventory item"
+      description: "Adds a new inventory item."
       parameters:
         - in: body
           name: item
@@ -382,6 +419,7 @@ paths:
     get:
       tags: [Inventory]
       summary: "Get inventory item"
+      description: "Gets an inventory item by ID."
       parameters:
         - in: path
           name: item_id
@@ -396,6 +434,7 @@ paths:
     put:
       tags: [Inventory]
       summary: "Update inventory item"
+      description: "Fully updates an inventory item."
       parameters:
         - in: path
           name: item_id
@@ -414,6 +453,7 @@ paths:
     delete:
       tags: [Inventory]
       summary: "Delete inventory item"
+      description: "Deletes an inventory item."
       parameters:
         - in: path
           name: item_id
@@ -422,7 +462,6 @@ paths:
       responses:
         204:
           description: "Item deleted"
-
 
 
 definitions:
@@ -434,21 +473,29 @@ definitions:
       name: { type: string }
       email: { type: string }
       phone: { type: string }
+    example:
+      id: 1
+      name: "John Doe"
+      email: "john@example.com"
+      phone: "555-1234"
 
   CustomerCreate:
     type: object
     required: [name, email, phone, password]
     properties:
-      id: { type: integer }
       name: { type: string }
       email: { type: string }
       phone: { type: string }
       password: { type: string }
+    example:
+      name: "Alice"
+      email: "alice@example.com"
+      phone: "555-6789"
+      password: "secure123"
 
   CustomerUpdate:
     type: object
     properties:
-      id: { type: integer }
       name: { type: string }
       email: { type: string }
       phone: { type: string }
@@ -460,23 +507,14 @@ definitions:
     properties:
       email: { type: string }
       password: { type: string }
+    example:
+      email: "john@example.com"
+      password: "mypassword"
 
   LoginResponse:
     type: object
     properties:
       token: { type: string }
-
-  AssignMechanicRequest:
-    type: object
-    required: [mechanic_id]
-    properties:
-      mechanic_id: { type: integer }
-
-  RemoveMechanicRequest:
-    type: object
-    required: [mechanic_id]
-    properties:
-      mechanic_id: { type: integer }
 
   Mechanic:
     type: object
@@ -484,38 +522,32 @@ definitions:
       id: { type: integer }
       name: { type: string }
       email: { type: string }
-      salary:
-        type: number
-        format: float
+      salary: { type: number, format: float }
 
   MechanicCreate:
     type: object
     required: [name, email, salary]
     properties:
-      id: { type: integer }
       name: { type: string }
       email: { type: string }
-      salary:
-        type: number
-        format: float
+      salary: { type: number }
+    example:
+      name: "Mike Ross"
+      email: "mike@example.com"
+      salary: 65000
 
   MechanicUpdate:
     type: object
     properties:
-      id: { type: integer }
       name: { type: string }
       email: { type: string }
-      salary:
-        type: number
-        format: float
+      salary: { type: number }
 
   ServiceTicket:
     type: object
     properties:
       id: { type: integer }
-      date:
-        type: string
-        format: date-time
+      date: { type: string, format: date-time }
       customer_id: { type: integer }
       service_description: { type: string }
       mechanics:
@@ -542,6 +574,18 @@ definitions:
         type: array
         items:
           type: integer
+
+  AssignMechanicRequest:
+    type: object
+    required: [mechanic_id]
+    properties:
+      mechanic_id: { type: integer }
+
+  RemoveMechanicRequest:
+    type: object
+    required: [mechanic_id]
+    properties:
+      mechanic_id: { type: integer }
 
   InventoryItem:
     type: object
