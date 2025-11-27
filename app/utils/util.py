@@ -33,14 +33,13 @@ def token_required(f):
         
         # Extract Authorization header
         auth_header = request.headers.get('Authorization')
-        if auth_header:
-            parts = auth_header.split(" ")
-            if len(parts) == 2 and parts[0] == "Bearer":
-                token = parts[1]
+        parts = auth_header.split()
         
-        # Token missing
-        if not token:
-            return jsonify({'message': 'Token is missing!'}), 401
+        if len(parts) != 2 and parts[0] != "Bearer":
+            return jsonify({'message': 'Token is invalid!'}), 401
+        token = parts[1]
+        
+        
 
         # Token exists → decode it
         try:
