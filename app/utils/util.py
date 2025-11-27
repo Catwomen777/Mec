@@ -26,33 +26,34 @@ def encode_token(customer_id):
     except Exception as e:
         return str(e)
     
-
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
         
+        # Extract Authorization header
         auth_header = request.headers.get('Authorization')
         if auth_header:
-            token = auth_header.split(" ")[1]
-            
+            parts = auth_header.split(" ")
+            if len(parts) == 2 and parts[0] == "Bearer":
+                token = parts[1]
+        
+        # Token missing
         if not token:
             return jsonify({'message': 'Token is missing!'}), 401
-        
-            try:
-                secret = current_app.config.get("SECRET_KEY", SECRET_KEY)
-                data = jwt.decode(token, secret, algorithms=['HS256'])
-                request.customer_id = int(data['sub'])
 
-            
-            except ExpiredSignatureError:   
-                return jsonify({'message': 'Token has expired!'}), 401
+        # Token exists → decode it
+        try:
+            secret = current_app.config.get("SECRET_KEY") or SECRET_KEY
+            data = jwt.decode(token, secret, algorithms=['HS256'])
+            request.customer_id = int(data.get('sub') or data.get('id'))
         
-            except JWTError:  
-                return jsonify({'message': 'Token is invalid!'}), 401 
-       
+        except ExpiredSignatureError:
+            return jsonify({'message': 'Token has expired!'}), 401
+        
+        except JWTError:
+            return jsonify({'message': 'Token is invalid!'}), 401
+
         return f(*args, **kwargs)
     
     return decorated
-        
-            
