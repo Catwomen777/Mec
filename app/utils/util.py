@@ -12,19 +12,24 @@ SECRET_KEY = os.environ.get("SECRET_KEY") or "super secret secret"
 
 def encode_token(customer_id):
     try:
-    
-
         payload = {
-        'exp': datetime.now(tz=timezone.utc) + timedelta(days=0, hours=1),
-        'iat': datetime.now(tz=timezone.utc),
-        'sub': str(customer_id)
-    }
-        secret = current_app.config.get("SECRET_KEY", SECRET_KEY)
+            'exp': datetime.now(tz=timezone.utc) + timedelta(hours=1),
+            'iat': datetime.now(tz=timezone.utc),
+            'sub': str(customer_id)
+        }
+
+        secret = current_app.config.get("SECRET_KEY") or "test-secret-key"
+
         token = jwt.encode(payload, secret, algorithm="HS256")
+
+        if isinstance(token, bytes):
+            token = token.decode("utf-8")
+
         return token
-   
+    
     except Exception as e:
         return str(e)
+
     
 def token_required(f):
     @wraps(f)
