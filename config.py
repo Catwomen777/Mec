@@ -8,7 +8,9 @@ class DevelopmentConfig:
 
 class TestingConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
+    TESTING: True
     Debug = True
+    SECRET_KEY = "test-secret-key"
     CACHE_TYPE = "simpleCache"
 
 class ProductionConfig:
