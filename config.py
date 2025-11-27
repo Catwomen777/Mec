@@ -7,11 +7,11 @@ class DevelopmentConfig:
     CACHE_TYPE = "SimpleCache"
 
 class TestingConfig:
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
-    TESTING: True
-    Debug = True
+    TESTING = True
+    DEBUG = True
     SECRET_KEY = "test-secret-key"
-    CACHE_TYPE = "simpleCache"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    CACHE_TYPE = "simple"
 
 class ProductionConfig:
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")or 'sqlite:///app.db'
