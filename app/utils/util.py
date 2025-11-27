@@ -45,7 +45,7 @@ def token_required(f):
         parts = auth_header.split()
 
         # Wrong format
-        if len(parts) != 2 or parts[0].lower() != 'bearer':
+        if len(parts) != 2 or parts[0].lower() != 'Bearer':
             return jsonify({'message': 'Token is missing!'}), 401
 
         token = parts[1]
