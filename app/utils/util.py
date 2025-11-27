@@ -37,21 +37,20 @@ def token_required(f):
 
         auth_header = request.headers.get('Authorization')
 
-        # If missing entirely → unauthorized
+        # If missing → unauthorized
         if not auth_header:
             return jsonify({'message': 'Token is missing!'}), 401
 
-        # Split the header (e.g. "Bearer <token>")
         parts = auth_header.split()
 
-        # Wrong format
-        if len(parts) != 2 or parts[0].lower() != 'Bearer':
+        # Correct validation (this is the key fix!)
+        if len(parts) != 2 or parts[0].lower() != 'bearer':
             return jsonify({'message': 'Token is missing!'}), 401
 
         token = parts[1]
 
         try:
-            secret = current_app.config.get("SECRET_KEY") or "super-secret-key"
+            secret = current_app.config.get("SECRET_KEY") or "test-secret-key"
             data = jwt.decode(token, secret, algorithms=['HS256'])
             request.customer_id = int(data.get('sub'))
         
